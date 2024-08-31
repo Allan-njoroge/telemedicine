@@ -1,15 +1,14 @@
 # Backend Documentation
 
 ## 1. Patients API
-### GET /patients
+### GET `/api/get-patients`
 
-Description: Retrieve a list of all patients.
-Query Parameters:
-gender (optional): Filter patients by gender.
-language (optional): Filter patients by language.
-Response:
-json
-Copy code
+**Description:**<br>
+Retrieve a list of all patients.<br/><br/>
+**Query Parameters:**<br>
+- `gender` (optional): Filter patients by gender.
+- `language` (optional): Filter patients by language.<br><br>**Response:**
+```json
 [
   {
     "patient_id": 709,
@@ -18,17 +17,20 @@ Copy code
     "date_of_birth": "1979-12-10",
     "gender": "Male",
     "language": "English"
-  },
-  ...
+  }
 ]
-GET /patients/
+```
+<br/><br/>
+### GET `/api/get-patients/:id`
 
-Description: Retrieve details of a specific patient by ID.
-Path Parameters:
-id: Patient ID.
-Response:
-json
-Copy code
+**Description:**<br/>
+Retrieve details of a specific patient by ID <br/>
+
+**Path Parameters:**<br/>
+patient_id.<br/><br/>
+**Response:**
+
+```json
 {
   "patient_id": 709,
   "first_name": "Ab",
@@ -37,12 +39,16 @@ Copy code
   "gender": "Male",
   "language": "English"
 }
-POST /patients
+```
 
-Description: Add a new patient.
-Request Body:
-json
-Copy code
+<br><br>
+### POST `/api/add-patients`
+
+**Description:**<br>
+Add a new patient.
+<br><br/>
+**Request Body:**
+```json
 {
   "first_name": "Ab",
   "last_name": "McGonigle",
@@ -50,6 +56,8 @@ Copy code
   "gender": "Male",
   "language": "English"
 }
+```
+
 Response:
 json
 Copy code
