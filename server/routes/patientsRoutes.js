@@ -15,4 +15,6 @@ router.get('/name', getPatientsByName)
 // get all patients by gender
 router.get('/gender/:gender')
 
+
+
 export default router
