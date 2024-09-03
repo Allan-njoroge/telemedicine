@@ -1,5 +1,5 @@
 import express from "express"
-import { getPatients, getPatientsById, getPatientsByName, getPatientsByGender, registerPatients } from "../controllers/patientsController.js"
+import { getPatients, getPatientsById, getPatientsByName, getPatientsByGender, patientsRegister, patientsLogin } from "../controllers/patientsController.js"
 
 const router = express.Router()
 
@@ -17,7 +17,10 @@ router.get('/gender/:gender', getPatientsByGender)
 
 
 // patient registration route
-router.post('/register', registerPatients)
+router.post('/register', patientsRegister)
+
+// patient login route
+router.post('/login', patientsLogin)
 
 
 export default router
