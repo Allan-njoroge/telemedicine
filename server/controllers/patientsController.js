@@ -1,5 +1,5 @@
 import db from "../utils/db.js"
-import bcrypt from "bcryptjs"
+import { encryptPassword } from "../utils/passwords.js"
 
 
 // get all patents
@@ -149,8 +149,7 @@ export const registerPatients = async (req, res) => {
             }
 
             // password encryption
-            const salt = bcrypt.genSaltSync(10);
-            const hashedPassword = bcrypt.hashSync(password, salt);
+            const hashedPassword = encryptPassword(password);
 
             // add patient to the database
             const addPatient = `
