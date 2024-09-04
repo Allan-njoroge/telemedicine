@@ -46,7 +46,7 @@ export const patientsRegister = async (req, res) => {
                     return res.status(400).json({ "message": "Could not add user. Please try again!" })
                 }
 
-                res.status(201).json({ "message": "User successfully added" })
+                res.status(201).json({ "message": "Patient Successfully Registered" })
             })
         })
     }
@@ -100,11 +100,66 @@ export const patientsLogin = async (req, res) => {
     DOCTORS AUTHORIZARION
 ====================================================
 */
+// doctors registration
+export const doctorsRegister = async (req, res) => {
+    try {
+        // get the patient details
+        const {
+            first_name, last_name, provider_specialty, email_address, phone_number, date_joined, password
+        } = req.body
+
+        //
+        const existingUser = "SELECT * FROM patients WHERE email_address = ?"
+        db.query(existingUser, [email_address], (err, data) => {
+            if (err) {
+                return res.status(400).json({ "message": `Something Went Wrong. Please try again! ${err}` })
+            }
+
+            if (data.length) {
+                return res.status(409).json({ "message": "Doctor with this email already exisits" })
+            }
+
+            // password encryption
+            const hashedPassword = encryptPassword(password);
+
+            // add patient to the database
+            const addPatient = `
+                INSERT INTO patients(
+                    first_name, last_name, provider_specialty, email_address, phone_number, date_joined, password
+                ) VALUES (?)`
 
 
+            const values = [first_name, last_name, provider_specialty, email_address, phone_number, date_joined, hashedPassword]
+            db.query(addPatient, [values], (err) => {
+                if(err) {
+                    return res.status(400).json({ "message": "Could not add user. Please try again!" })
+                }
+
+                res.status(201).json({ "message": "Doctor Successfully Registered" })
+            })
+        })
+    }
+    catch (err) {
+        res.status(500).json({ "message": `Internal Server Error, ${err}` })
+    }
+}
+
+
+// doctors login route
+export const doctorsLogin = async(req, res) => {
+    try{
+
+    }
+    catch(err) {
+        res.status(500).json({ "message": "Internal Server Error" })
+    }
+}
 
 /*
 ====================================================
     LOGOUT
 ====================================================
 */
+export const logout = async(req, res) => {
+
+}
