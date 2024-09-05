@@ -13,9 +13,7 @@ export const encryptPassword = (password) => {
     const salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
 }
-// const hashedPassword = encryptPassword("Allan")
 
 export const comparePassword = (password, retrievedPassword) => {
     return bcrypt.compareSync(password, retrievedPassword); 
 }
-// const comparison = comparePassword("Allan1", hashedPassword)
