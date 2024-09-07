@@ -148,10 +148,43 @@ export const doctorsRegister = async (req, res) => {
 // doctors login route
 export const doctorsLogin = async(req, res) => {
     try{
+        const { email_address, password } = req.body
 
+        if(!email_address || !password) {
+            return res.status(400).json({ "message": "Please fill in all the required fields" })
+        }
+
+        const existingDoctor = "SELECT * FROM provider WHERE email_address = ?"
+        db.query(existingDoctor, email_address, (err, data) => {
+            if(err) {
+                return res.status(400).json({ "message": "Unable to retrieve doctor inforamtion" })
+            }
+
+            if(!data.length) {
+                return res.status(404).json({ "message": "Doctor Not Found!" })
+            }
+
+            // Validate password
+            const passwordMatch = comparePassword(password, data[0].password)
+
+            if(!passwordMatch) {
+                return res.status(400)
+            }
+
+            const userDetails = { id:data[0].provider_id, first_name:data[0].first_name, last_name:data[0].last_name, email:data[0].email_address  }
+
+            const accessToken = jwt.sign(userDetails, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
+            const refreshToken = jwt.sign(userDetails, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30s' })
+
+            res.status(200).json({
+                "message": "User logged in successfully",
+                "access-token": accessToken,
+                "refresh-token": refreshToken
+            }) 
+        }) 
     }
     catch(err) {
-        res.status(500).json({ "message": "Internal Server Error" })
+        return res.status(500).json({ "message": "Internal Server Error" })
     }
 }
 
@@ -161,5 +194,10 @@ export const doctorsLogin = async(req, res) => {
 ====================================================
 */
 export const logout = async(req, res) => {
+    try{
 
+    }
+    catch(err) {
+        return res.status(500).json({ "message": "Internal Server Error" })
+    }
 }
