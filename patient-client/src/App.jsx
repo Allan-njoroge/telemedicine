@@ -1,10 +1,13 @@
-import { Button } from "./components/ui/button"
+import { Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar"
+import Home from "./pages/Home"
 
 function App() {
   return (
-    <div className="h-[100vh] w-full flex justify-center items-center">
-      <h1>Telemedicine App - Patient's Panel</h1>
-      <Button>Click Me</Button>
+    <div className="relative">
+      <Navbar  />
+      <Home className="mt-20" />
     </div>
   )
 }
