@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -19,6 +18,7 @@ const Doctors = () => {
     { field: "Primary Care" },
     { field: "Dermatologist" },
   ];
+
   return (
     <div className="py-28 w-[90%] mx-auto flex flex-col justify-center items-center">
       <div className="w-full">
@@ -34,7 +34,7 @@ const Doctors = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div>
+      <div className="w-full">
         <DoctorsInfo />
       </div>
     </div>
