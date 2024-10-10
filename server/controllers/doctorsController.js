@@ -53,9 +53,7 @@ export const getDoctorsByName = async (req, res) => {
         const { name } = req.query
 
         // chack if name field is valid
-        if (!name || typeof name !== "string") {
-            return res.status(400).json({ "message": "Invalid name format or missing value" })
-        }
+        if (!name || typeof name !== "string") return res.status(400).json({ "message": "Invalid name format or missing value" })
 
         // check number of names in the the input
         const patientName = name.split(" ")
@@ -117,5 +115,51 @@ export const getDoctorsByGender = async (req, res) => {
     }
     catch (err) {
         res.status(500).json({ "message": "Internal Server Error" })
+    }
+}
+
+// update doctor information
+export const updateDoctor = async(req, res) => {
+    try{
+        const doctorId = req.params.id
+        const { first_name, last_name } = req.body
+
+        const [doctor] = await db.query('SELECT * FROM doctors WHERE provider_id = ?', [doctorId])
+        if(!doctor.length) {
+            return res.status(404).json({ message: "Doctor Not Found" })
+        }
+
+        // dynamic queries and values to updat
+        const fields = []
+        const values = []
+
+
+        // first_name
+        if(first_name) {
+            fields.push('first_name = ?')
+            values.push('first_name')
+        }
+
+        // last name
+        if(last_name) {
+            fields.push('last_name = ?')
+            values.push('last_name')
+        }
+        
+        // if there are no fiels to update
+        if(!fields.length) {
+            return res.status(400).json({ message: "No fields to update" })
+        }
+
+        // add doctor id to the vaues of the array for the where clause
+        values.push(doctorId)
+ 
+        const sql = `UPDATE doctors SET ${fields.join(', ')} WHERE provider_id = ?`
+        await db.query(sql, values)
+
+        return res.status(200).json({ message: "Doctor upadted succeddfully" })
+    }
+    catch(err) {
+        res.status(500).json({ message: "Internal Server Error" })
     }
 }
