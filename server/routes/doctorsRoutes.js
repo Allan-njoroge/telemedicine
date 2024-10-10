@@ -3,17 +3,20 @@ import { getDoctors, getDoctorsById, getDoctorsByName, getDoctorsByGender } from
 
 const router = express.Router()
 
-// get all patents
+// get all doctors
 router.get('', getDoctors)
 
-//get patient by id
+//get doctor by id
 router.get('/id/:id', getDoctorsById)
 
-// get patient by name
+// get doctor by name
 router.get('/name', getDoctorsByName)
 
-// get all patients by gender
+// get all doctors by gender
 router.get('/gender/:gender', getDoctorsByGender)
+
+// update doctor
+router.put('/update/:id')
 
 
 
