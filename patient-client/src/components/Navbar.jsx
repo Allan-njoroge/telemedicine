@@ -47,7 +47,9 @@ const Navbar = () => {
 
       {/* Sign in button and profile option */}
       <div>
-        <Button className="hidden md:flex">Sign In</Button>
+        <Button className="hidden md:flex">
+          <Link to={"/login"}>Sign In</Link>
+        </Button>
         {/* Menu navigation icons */}
         <div className="flex md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? (
