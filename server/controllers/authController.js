@@ -77,15 +77,34 @@ export const patientsLogin = async (req, res) => {
                 return res.status(400).json({ "message": "Invalid email or password" })
             }
 
-            const userDetails = { id:data[0].patient_id, first_name:data[0].first_name, last_name:data[0].last_name, email:data[0].email_address  }
+            const userDetails = { 
+                id:data[0].patient_id, 
+                first_name:data[0].first_name, 
+                last_name:data[0].last_name, 
+                email:data[0].email_address 
+            }
 
             const accessToken = jwt.sign(userDetails, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
             const refreshToken = jwt.sign(userDetails, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30s' })
 
+            res.cookie('access-token', accessToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 10 * 60 * 1000
+            })
+
+            res.cookie('refresh-token', refreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'Strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
+            });
+
             res.status(200).json({
-                "message": "User logged in successfully",
-                "access-token": accessToken,
-                "refresh-token": refreshToken
+                message: "Patient logged in successfully",
+                accessToken,
+                refreshToken
             })
         })
     }
@@ -176,10 +195,24 @@ export const doctorsLogin = async(req, res) => {
             const accessToken = jwt.sign(userDetails, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
             const refreshToken = jwt.sign(userDetails, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30s' })
 
+            res.cookie('access-token', accessToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 10 * 60 * 1000
+            })
+
+            res.cookie('refresh-token', refreshToken, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'Strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
+            });
+
             res.status(200).json({
-                "message": "User logged in successfully",
-                "access-token": accessToken,
-                "refresh-token": refreshToken
+                message: "Doctor logged in successfully",
+                accessToken,
+                refreshToken
             }) 
         }) 
     }
@@ -195,9 +228,22 @@ export const doctorsLogin = async(req, res) => {
 */
 export const logout = async(req, res) => {
     try{
+        // clear the access token and the refresh token
+        res.clearCookie('access-token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict'
+        })
 
+        res.clearCookie('refresh-token', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'Strict'
+        })
+
+        res.status(200).json({ message: "Logout Successful" })
     }
     catch(err) {
-        return res.status(500).json({ "message": "Internal Server Error" })
+        return res.status(500).json({ message: "Internal Server Error" })
     }
 }
